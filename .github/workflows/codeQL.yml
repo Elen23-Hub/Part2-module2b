@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        language: ['javascript', 'python']
+        language: ['javascript', 'python', 'cpp', 'csharp']
 
 
     permissions:
@@ -24,6 +24,13 @@ jobs:
 
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v1
+        with:
+          languages: ${{ matrix.language }}
+
+      # This step only runs if language is cpp or csharp
+      - name: Autobuild
+        if: matrix.language == 'cpp' || matrix.language == 'csharp'
+        uses: github/codeql-action/autobuild@v1
 
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v1
